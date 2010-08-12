@@ -30,6 +30,7 @@ function c960gs_func($atts, $content=null, $code=""){
         'size' => '12',
         'prefix' => '0',
         'suffix' => '0',
+        'pos' => 'aucune'
         ), $atts));
     
     // Generate class names of the div
@@ -43,6 +44,9 @@ function c960gs_func($atts, $content=null, $code=""){
     if($suffix!="0"){
         $class.=" suffix_".$suffix;
     }
+    if($pos!="aucune"){
+        $class.=" ".$pos;
+    }
     
     // Generate the div tag
     if($class!=""){
@@ -51,9 +55,15 @@ function c960gs_func($atts, $content=null, $code=""){
     else{
         $div="<div>";
     }
-    return $div.do_shortcode($content)."</div>";
+    return $div;
 }
 add_shortcode('960gs', 'c960gs_func');
+
+function c960gs_close($atts, $content=null, $code=""){
+    extract(shortcode_atts(array(), $atts));
+    return "</div>";
+}
+add_shortcode('960gs_close', 'c960gs_close');
 
 function c960gs_clear($atts, $content=null, $code=""){
     extract(shortcode_atts(array(), $atts));
@@ -127,10 +137,22 @@ function insertForm() {
                     </select>
                 </td>
             </tr>
+            <tr valign="top">
+                <th scope="row"><label for="c960gs_pos"><?php _e('Classe supplementaire :')?></label></th>
+                <td>
+                    <select name="c960gs[pos]" id="c960gs_pos">
+                        <option>aucune</option>
+                        <option>alpha</option>
+                        <option>omega</option>
+                        <option>alpha omega</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
                 <th></th>
                 <td>
                     <input type="button" onclick="return c960gs.sendToEditor(this.form);" value="<?php _e('Ajouter la colonne &raquo;'); ?>" />
+                    <input type="button" onclick="return c960gs.sendCloserToEditor();" value="<?php _e('Ajouter balise de fin &raquo;'); ?>" />
                     <input type="button" onclick="return c960gs.sendClearerToEditor();" value="<?php _e('Ajouter un séparateur &raquo;'); ?>" />
                 </td>
             </tr>

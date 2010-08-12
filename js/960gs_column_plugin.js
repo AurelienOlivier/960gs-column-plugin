@@ -11,7 +11,10 @@ c960gs.prototype = {
     options           : {},
     generateShortCode : function() {
         var attrs = '';
-        selectedTxt = tinyMCE.getInstanceById('content').selection.getContent();
+        var selectedTxt = '';
+        if(tinyMCE.getInstanceById('content')){
+            selectedTxt = tinyMCE.getInstanceById('content').selection.getContent();
+        }
         
         jQuery.each(this['options'], function(name, value){
             if (value != '') {
@@ -20,7 +23,7 @@ c960gs.prototype = {
         });
         
         if(selectedTxt != ""){
-            return '[960gs' + attrs + ']'+selectedTxt+'[/960gs]';
+            return '[960gs' + attrs + ']'+selectedTxt;
         }
         
         return '[960gs' + attrs + ']';
@@ -30,13 +33,17 @@ c960gs.prototype = {
         var $this = this;
         collection.each(function () {
             var name = this.name.substring(7, this.name.length-1);
-            if(this.value!="0") $this['options'][name] = this.value;
+            if(this.value!="0" && this.value!="aucune") $this['options'][name] = this.value;
         });
         send_to_editor(this.generateShortCode());
         return false;
     },
     sendClearerToEditor      : function(f) {
         send_to_editor('[960gs_clear]');
+        return false;
+    },
+    sendCloserToEditor      : function(f) {
+        send_to_editor('[960gs_close]');
         return false;
     }
 }
